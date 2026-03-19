@@ -1,0 +1,49 @@
+package com.narxoz.rpg.composite;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class BaseComposite implements CombatNode {
+    private final String name;
+    protected final List<CombatNode> children = new ArrayList<>();
+
+    public BaseComposite(String name) { this.name = name; }
+
+    public void add(CombatNode node) { children.add(node); }
+
+    @Override
+    public boolean isAlive() {
+        return children.stream().anyMatch(CombatNode::isAlive);
+    }
+
+    @Override
+    public int getAttackPower() {
+        return children.stream().filter(CombatNode::isAlive).mapToInt(CombatNode::getAttackPower).sum();
+    }
+
+    @Override
+    public void takeDamage(int amount) {
+        List<CombatNode> alive = children.stream().filter(CombatNode::isAlive).toList();
+        if (alive.isEmpty()) return;
+        int damagePerEach = amount / alive.size();
+        for (CombatNode child : alive) child.takeDamage(damagePerEach);
+    }
+
+    @Override
+    public void printTree(String indent) {
+        System.out.println(indent + "+ " + name);
+        for (CombatNode child : children) child.printTree(indent + "  ");
+    }
+
+    @Override
+    public String getName() { return name; }
+    
+    @Override
+    public List<CombatNode> getChildren() { return children; }
+    
+    // В интерфейсе CombatNode у тебя был getHealth(), для группы это сумма HP всех:
+    @Override
+    public int getHealth() {
+        return children.stream().mapToInt(CombatNode::getHealth).sum();
+    }
+}
