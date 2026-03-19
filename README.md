@@ -3,8 +3,9 @@
 ## Project Overview
 This project demonstrates the implementation of **Bridge** and **Composite** design patterns in a Java-based RPG combat simulation.
 
+---
+
 ## 1. Composite Pattern (Hierarchy)
-The `CombatNode` interface is the core component. `UnitLeaf` represents individual fighters, while `BaseComposite` allows nesting parties within raids.
 
 ```mermaid
 classDiagram
@@ -27,8 +28,6 @@ classDiagram
     BaseComposite <|-- PartyComposite
     BaseComposite <|-- RaidGroup
 2. Bridge Pattern (Skills & Effects)
-The Skill abstraction maintains a reference to an EffectImplementor. This allows any skill to use any elemental effect dynamically.
-
 Фрагмент кода
 classDiagram
     class Skill {
@@ -65,6 +64,3 @@ Composite: Supports nested groups (Raid -> Party -> Hero).
 Bridge: Separates skill types from elemental effects to avoid class explosion.
 
 RaidEngine: Simulates turn-based combat using only top-level abstractions.
-
-
----
