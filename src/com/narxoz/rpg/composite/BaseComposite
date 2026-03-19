@@ -41,7 +41,6 @@ public abstract class BaseComposite implements CombatNode {
     @Override
     public List<CombatNode> getChildren() { return children; }
     
-    // В интерфейсе CombatNode у тебя был getHealth(), для группы это сумма HP всех:
     @Override
     public int getHealth() {
         return children.stream().mapToInt(CombatNode::getHealth).sum();
