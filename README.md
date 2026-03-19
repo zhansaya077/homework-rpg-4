@@ -1,45 +1,37 @@
 # Homework 4: RPG Raid System - Bridge + Composite
+# Homework 4: RPG Raid System - Bridge + Composite
 
 ## Overview
-You now have heroes, enemies, and a basic battle engine from previous homework. In this assignment, you will design a raid system that supports:
-- Flexible skill-effect combinations without class explosion
-- Uniform handling of single fighters and nested teams
+This project implements a raid system for an RPG using structural design patterns. It allows for flexible skill-effect combinations and uniform handling of individual units and nested teams.
 
-Your job is to implement:
-- **Bridge Pattern** for skill + effect decoupling
-- **Composite Pattern** for unit + group hierarchies
+## Implementation Details
 
-## What You Will Build
-- A `CombatNode` hierarchy where leaf units and groups share one interface
-- A `Skill` hierarchy that delegates damage behavior to `EffectImplementor`
-- A raid engine that can run battles for single units and nested groups
+### 1. Composite Pattern (Team Hierarchy)
+We use the **Composite Pattern** to treat single heroes and entire raid groups identically.
+- **Component:** `CombatNode` interface.
+- **Leaf:** `UnitLeaf` (Base for `HeroUnit`, `EnemyUnit`).
+- **Composite:** `BaseComposite` (Base for `PartyComposite`, `RaidGroup`).
 
-## Patterns and Roles
-- **Bridge**: `Skill` (abstraction) + `EffectImplementor` (implementor)
-- **Composite**: `CombatNode` (component), `UnitLeaf` (leaf), `PartyComposite`/`RaidGroup` (composite)
+#### Composite UML Diagram
+```mermaid
+classDiagram
+    class CombatNode {
+        <<interface>>
+        +getName() String
+        +getHealth() int
+        +getAttackPower() int
+        +takeDamage(amount: int)
+        +isAlive() boolean
+        +getChildren() List
+    }
+    class UnitLeaf { <<abstract>> }
+    class BaseComposite { <<abstract>> }
+    
+    CombatNode <|.. UnitLeaf
+    CombatNode <|.. BaseComposite
+    BaseComposite "1" *-- "many" CombatNode : children
+    UnitLeaf <|-- HeroUnit
+    UnitLeaf <|-- EnemyUnit
+    BaseComposite <|-- PartyComposite
+    BaseComposite <|-- RaidGroup
 
-## Connection to Previous Homework
-- HW1: object creation patterns for characters and equipment
-- HW2: advanced enemy creation and cloning
-- HW3: singleton battle orchestration and API adapters
-- HW4: structural flexibility for abilities and team hierarchies
-
-## Requirements at a Glance
-- Implement Bridge with at least 2 skill types and 3 effect implementors
-- Implement Composite with leaf and nested group behavior
-- Integrate both patterns in `RaidEngine`
-- Demonstrate all features in `Main.java`
-- Provide UML diagrams for Bridge and Composite
-
-## Running the Project
-```bash
-javac -d out $(find src -name "*.java")
-java -cp out com.narxoz.rpg.Main
-```
-
-## Deliverables
-- Completed Java code
-- UML diagrams (2)
-- Clear console output from demo
-
-Read `ASSIGNMENT.md` for full instructions and rubric.
