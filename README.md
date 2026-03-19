@@ -21,7 +21,6 @@ classDiagram
     BaseComposite <|-- PartyComposite
     BaseComposite <|-- RaidGroup
 2. Bridge Pattern
-Фрагмент кода
 classDiagram
     class Skill {
         <<abstract>>
