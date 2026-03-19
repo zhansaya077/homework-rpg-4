@@ -27,6 +27,11 @@ classDiagram
     UnitLeaf <|-- EnemyUnit
     BaseComposite <|-- PartyComposite
     BaseComposite <|-- RaidGroup
+
+
+
+
+
 2. Bridge Pattern (Skills & Effects)
 Фрагмент кода
 classDiagram
