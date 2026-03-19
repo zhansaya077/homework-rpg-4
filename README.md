@@ -1,18 +1,24 @@
-# Homework 4: RPG Raid System (Bridge + Composite)
+# Homework 4: RPG Raid System - Bridge + Composite
 
-## Project Overview
-This project demonstrates the implementation of **Bridge** and **Composite** design patterns in a Java-based RPG combat simulation.
+## Overview
+This project implements a raid system for an RPG using structural design patterns. It allows for flexible skill-effect combinations and uniform handling of individual units and nested teams.
 
----
+## Implementation Details
 
-## 1. Composite Pattern (Hierarchy)
+### 1. Composite Pattern (Team Hierarchy)
+We use the **Composite Pattern** to treat single heroes and entire raid groups identically.
+- **Component:** `CombatNode` interface.
+- **Leaf:** `UnitLeaf` (Base for `HeroUnit`, `EnemyUnit`).
+- **Composite:** `BaseComposite` (Base for `PartyComposite`, `RaidGroup`).
 
+#### Composite UML Diagram
 ```mermaid
 classDiagram
     class CombatNode {
         <<interface>>
         +getName() String
         +getHealth() int
+        +getAttackPower() int
         +takeDamage(amount: int)
         +isAlive() boolean
         +getChildren() List
@@ -22,18 +28,20 @@ classDiagram
     
     CombatNode <|.. UnitLeaf
     CombatNode <|.. BaseComposite
-    BaseComposite "1" *-- "many" CombatNode : contains
+    BaseComposite "1" *-- "many" CombatNode : children
     UnitLeaf <|-- HeroUnit
     UnitLeaf <|-- EnemyUnit
     BaseComposite <|-- PartyComposite
     BaseComposite <|-- RaidGroup
-
-
-
-
-
 2. Bridge Pattern (Skills & Effects)
-Фрагмент кода
+We use the Bridge Pattern to decouple the skill type (Single/Area) from the damage type (Fire, Ice, Physical).
+
+Abstraction: Skill.
+
+Implementor: EffectImplementor.
+
+Bridge UML Diagram
+
 classDiagram
     class Skill {
         <<abstract>>
@@ -43,7 +51,6 @@ classDiagram
     class EffectImplementor {
         <<interface>>
         +computeDamage(basePower: int) int
-        +getEffectName() String
     }
     
     Skill <|-- SingleTargetSkill
@@ -53,19 +60,12 @@ classDiagram
     EffectImplementor <|.. IceEffect
     EffectImplementor <|.. PhysicalEffect
 How to Run
-Navigate to the project root directory.
-
-Compile the project:
-
 Bash
 javac -d out $(find src -name "*.java")
-Run the demonstration:
-
-Bash
 java -cp out com.narxoz.rpg.Main
-Project Logic
-Composite: Supports nested groups (Raid -> Party -> Hero).
+Project Structure
+com.narxoz.rpg.composite: Contains the unit and group hierarchy.
 
-Bridge: Separates skill types from elemental effects to avoid class explosion.
+com.narxoz.rpg.bridge: Contains the skill and effect logic.
 
-RaidEngine: Simulates turn-based combat using only top-level abstractions.
+com.narxoz.rpg.battle: Contains the RaidEngine and simulation logic.
