@@ -1,4 +1,4 @@
-# Homework 4: RPG Raid System - Bridge + Composite
+
 # Homework 4: RPG Raid System - Bridge + Composite
 
 ## Overview
@@ -34,4 +34,24 @@ classDiagram
     UnitLeaf <|-- EnemyUnit
     BaseComposite <|-- PartyComposite
     BaseComposite <|-- RaidGroup
+
+
+classDiagram
+    class Skill {
+        <<abstract>>
+        #effect: EffectImplementor
+        +cast(target: CombatNode)
+    }
+    class EffectImplementor {
+        <<interface>>
+        +computeDamage(basePower: int) int
+        +getEffectName() String
+    }
+    
+    Skill <|-- SingleTargetSkill
+    Skill <|-- AreaSkill
+    Skill o-- EffectImplementor : Bridge
+    EffectImplementor <|.. FireEffect
+    EffectImplementor <|.. IceEffect
+    EffectImplementor <|.. PhysicalEffect
 
